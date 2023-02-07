@@ -14,7 +14,7 @@ jobs:
     - name: Install Dependencies
       run: |
         python3 -m pip install --upgrade pip
-        pip install servicefoundry, mlfoundry
+        pip install servicefoundry mlfoundry
     - name: Run the compare script
       env:
         WORKSPACE_FQN : ${{ secrets.WORKSPACE_FQN }}
