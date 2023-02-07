@@ -1,7 +1,7 @@
 name: Deploy Best Model version CI
 
 on:
-  repository_dispatch:
+  workflow_dispatch:
 
 jobs:
   deploy:
