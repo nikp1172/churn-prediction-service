@@ -28,7 +28,7 @@ for mv in mv_dict['model_versions']:
     metrics = client.get_run(mv['run_id']).get_metrics()
     mv_info[mv['fqn']] = {
         "accuracy": metrics['accuracy'][-1].value,
-        "prediction_time": metrics['prediction_time'][-1].value,
+        "avg_prediction_time": metrics['avg_prediction_time'][-1].value,
         "run_id": mv['run_id']
     }
     latest_fqn = mv['fqn']
@@ -38,7 +38,7 @@ def get_best_mv(mv_info):
     best_fqn = None
     target_v = -10
     for fqn, mv in mv_info.items():
-        current_v = mv['accuracy'] - mv['prediction_time']
+        current_v = mv['accuracy'] - mv['avg_prediction_time']
         if current_v > target_v:
             best_fqn = fqn
             target_v = current_v
@@ -53,8 +53,8 @@ if get_best_mv(mv_info) == latest_fqn:
     latest_run.set_tags(
         {
             "DEPLOYMENT_STATUS": "DEPLOYED",
-            "CURRENT_SCORE": mv['accuracy'] - mv['prediction_time'],
-            "BEST_SCORE": mv['accuracy'] - mv['prediction_time'],
+            "CURRENT_SCORE": mv['accuracy'] - mv['avg_prediction_time'],
+            "BEST_SCORE": mv['accuracy'] - mv['avg_prediction_time'],
             "BEST_MODEL_VERSION": latest_fqn
         }
     )
@@ -65,8 +65,8 @@ else:
     latest_run.set_tags(
         {
             "DEPLOYMENT_STATUS": "USING_EXISTING_MODEL",
-            "CURRENT_SCORE": mv['accuracy'] - mv['prediction_time'],
-            "BEST_SCORE": best_mv['accuracy'] - best_mv['prediction_time'],
+            "CURRENT_SCORE": mv['accuracy'] - mv['avg_prediction_time'],
+            "BEST_SCORE": best_mv['accuracy'] - best_mv['avg_prediction_time'],
             "BEST_MODEL_VERSION": best_fqn
         }
     )
