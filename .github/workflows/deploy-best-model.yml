@@ -2,6 +2,23 @@ name: Deploy Best Model version CI
 
 on:
   repository_dispatch:
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+    - name: Install Dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install servicefoundry, mlfoundry
+    - name: Run the compare script
+      env:
+        WORKSPACE_FQN : ${{ secrets.WORKSPACE_FQN }}
+        TFY_API_KEY : ${{ secrets.TFY_API_KEY }}
+        MODEL_ID : ${{secrets.MODEL_ID}}
+      run: |
+        python3 compare-and-deploy.py
