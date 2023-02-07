@@ -5,26 +5,26 @@ from servicefoundry import ModelDeployment, Resources, TruefoundryModelRegistry
 
 logging.basicConfig(level=logging.INFO)
 
-# parsing the input arguments
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    "--workspace_fqn",
-    type=str,
-    required=True,
-    help="fqn of workspace where you want to deploy",
-)
-
-parser.add_argument(
-    "--model_version_fqn",
-    type=str,
-    required=True,
-    help="end point of the trained model that would be used for inference",
-)
-
-args = parser.parse_args()
-
 
 def deploy_model(workspace_fqn, model_version_fqn):
+    # parsing the input arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--workspace_fqn",
+        type=str,
+        required=True,
+        help="fqn of workspace where you want to deploy",
+    )
+
+    parser.add_argument(
+        "--model_version_fqn",
+        type=str,
+        required=True,
+        help="end point of the trained model that would be used for inference",
+    )
+
+    args = parser.parse_args()
+    
     model_deployment = ModelDeployment(
         name=f"churn-prediction",
         model_source=TruefoundryModelRegistry(model_version_fqn=model_version_fqn),
