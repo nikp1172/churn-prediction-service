@@ -1,0 +1,7 @@
+name: Deploy Best Model version CI
+
+on:
+  repository_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
