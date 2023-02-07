@@ -29,6 +29,7 @@ for mv in mv_dict['model_versions']:
     mv_info[mv['fqn']] = {
         "accuracy": metrics['accuracy'][-1].value,
         "prediction_time": metrics['prediction_time'][-1].value,
+        "run_id": mv['run_id']
     }
     latest_fqn = mv['fqn']
 
@@ -44,5 +45,28 @@ def get_best_mv(mv_info):
     return best_fqn
 
 
+latest_run = client.get_run(mv_info[latest_fqn]["run_id"])
+
 if get_best_mv(mv_info) == latest_fqn:
     deploy_model(workspace_fqn=WORKSPACE_FQN, model_version_fqn=latest_fqn)
+    mv = mv_info[latest_fqn]
+    latest_run.set_tags(
+        {
+            "DEPLOYMENT_STATUS": "DEPLOYED",
+            "CURRENT_SCORE": mv['accuracy'] - mv['prediction_time'],
+            "BEST_SCORE": mv['accuracy'] - mv['prediction_time'],
+            "BEST_MODEL_VERSION": latest_fqn
+        }
+    )
+else:
+    mv = mv_info[latest_fqn]
+    best_fqn = get_best_mv(mv_info)
+    best_mv = mv_info[best_fqn]
+    latest_run.set_tags(
+        {
+            "DEPLOYMENT_STATUS": "USING_EXISTING_MODEL",
+            "CURRENT_SCORE": mv['accuracy'] - mv['prediction_time'],
+            "BEST_SCORE": best_mv['accuracy'] - best_mv['prediction_time'],
+            "BEST_MODEL_VERSION": best_fqn
+        }
+    )
