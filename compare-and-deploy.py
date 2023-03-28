@@ -31,7 +31,8 @@ for mv in mv_dict['model_versions']:
         "avg_prediction_time": metrics['avg_prediction_time'][-1].value,
         "run_id": mv['run_id']
     }
-    latest_fqn = mv['fqn']
+    if not latest_fqn:
+        latest_fqn = mv['fqn']
 
 
 def get_best_mv(mv_info):
