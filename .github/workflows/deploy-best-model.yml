@@ -20,5 +20,6 @@ jobs:
         WORKSPACE_FQN : ${{ secrets.WORKSPACE_FQN }}
         TFY_API_KEY : ${{ secrets.TFY_API_KEY }}
         MODEL_ID : ${{secrets.MODEL_ID}}
+        TFY_HOST: ${{secrets.TFY_HOST}}
       run: |
         python3 compare-and-deploy.py
