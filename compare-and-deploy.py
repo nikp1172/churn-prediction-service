@@ -25,7 +25,7 @@ mv_info = {}
 latest_fqn = None
 mv_dict = response_mv.json()
 for mv in mv_dict['model_versions']:
-    metrics = client.get_run(mv['run_id']).get_metrics()
+    metrics = client.get_run_by_id(mv['run_id']).get_metrics()
     mv_info[mv['fqn']] = {
         "accuracy": metrics['accuracy'][-1].value,
         "avg_prediction_time": metrics['avg_prediction_time'][-1].value,
