@@ -46,7 +46,7 @@ def get_best_mv(mv_info):
     return best_fqn
 
 
-latest_run = client.get_run(mv_info[latest_fqn]["run_id"])
+latest_run = client.get_run_by_id(mv_info[latest_fqn]["run_id"])
 
 if get_best_mv(mv_info) == latest_fqn:
     deploy_model(workspace_fqn=WORKSPACE_FQN, model_version_fqn=latest_fqn)
